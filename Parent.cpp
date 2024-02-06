@@ -48,5 +48,14 @@ int main()
     HANDLE hProcessInfo = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, 3 * sizeof(double), TEXT("SharedMemory-ProcessInfo"));
     double *sharedProcessInfo = (double *)MapViewOfFile(hProcessInfo, FILE_MAP_ALL_ACCESS, 0, 0, 3 * sizeof(double));
 
+    file.clear();
+    file.seekg(0, ios::beg);
+
+    for (int i = 0; i < DataSize; i++) {
+        file >> sharedNumbers[i];
+    }
+    file.close();
+
+
     return 0;
 }
