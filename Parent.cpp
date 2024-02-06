@@ -28,6 +28,11 @@ int main() {
     cout << "Enter runtime (seconds): ";
     cin >> runtime;
 
-
+    int DataSize = 0;
+    double number;
+    while (file >> number) {
+        DataSize++;
+    }
+    cout << endl << filename << " with " << DataSize << " records and runtime " << runtime << " seconds and with " << Core << " core" << endl << endl;
     return 0;
 }
