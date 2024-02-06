@@ -56,6 +56,11 @@ int main()
     }
     file.close();
 
+     double totalLands = 0;
+    for (int i = 0; i < DataSize; i++) {
+        totalLands += sharedNumbers[i];
+    }
+
 
     return 0;
 }
