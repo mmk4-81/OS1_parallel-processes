@@ -45,5 +45,8 @@ int main()
     HANDLE hResult = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, Core * (DataSize + 4) * sizeof(double), TEXT("SharedMemory-result"));
     double *result = (double *)MapViewOfFile(hResult, FILE_MAP_ALL_ACCESS, 0, 0, Core * (DataSize + 4) * sizeof(double));
 
+    HANDLE hProcessInfo = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, 3 * sizeof(double), TEXT("SharedMemory-ProcessInfo"));
+    double *sharedProcessInfo = (double *)MapViewOfFile(hProcessInfo, FILE_MAP_ALL_ACCESS, 0, 0, 3 * sizeof(double));
+
     return 0;
 }
