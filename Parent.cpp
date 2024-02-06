@@ -33,6 +33,13 @@ int main() {
     while (file >> number) {
         DataSize++;
     }
+    
     cout << endl << filename << " with " << DataSize << " records and runtime " << runtime << " seconds and with " << Core << " core" << endl << endl;
+     
+    HANDLE hData = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, DataSize * sizeof(double), TEXT("SharedMemory-data"));
+    double* sharedNumbers = (double*)MapViewOfFile(hData, FILE_MAP_ALL_ACCESS, 0, 0, DataSize * sizeof(double)); 
+
+
+
     return 0;
 }
