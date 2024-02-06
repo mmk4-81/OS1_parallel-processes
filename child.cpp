@@ -50,15 +50,15 @@ int main()
 
     auto start_time = high_resolution_clock::now();
 
-   
+    while (true)
+    {
 
-    while (true) {
-
-        double* distribution = new double[DataSize];
-        int sum[3] = { 0,0,0 };
+        double *distribution = new double[DataSize];
+        int sum[3] = {0, 0, 0};
 
         srand(time(NULL) + pid);
-        for (int i = 0; i < DataSize; i++) {
+        for (int i = 0; i < DataSize; i++)
+        {
             int randomindex = rand() % 3;
             sum[randomindex] += lands[i];
             distribution[i] = randomindex;
@@ -66,7 +66,8 @@ int main()
 
         double newdiff = abs(sum[0] - 0.4 * totalLands) + abs(sum[1] - 0.4 * totalLands) + abs(sum[2] - 0.2 * totalLands);
 
-        if (newdiff < currentdiff) {
+        if (newdiff < currentdiff)
+        {
             currentdiff = newdiff;
 
             for (int i = 0; i < DataSize; i++)
@@ -82,12 +83,19 @@ int main()
         auto end_time = high_resolution_clock::now();
         auto elapsed_time = duration_cast<duration<double>>(end_time - start_time).count();
 
-        if (elapsed_time >= runtime) {
+        if (elapsed_time >= runtime)
+        {
             break;
         }
-
     }
 
+    UnmapViewOfFile(lands);
+    UnmapViewOfFile(result);
+    UnmapViewOfFile(sharedProcessInfo);
+
+    CloseHandle(hData);
+    CloseHandle(hResult);
+    CloseHandle(hProcessInfo);
 
     return 0;
 }
