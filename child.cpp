@@ -16,16 +16,35 @@ int main()
     HANDLE hResult = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, TEXT("SharedMemory-result"));
     HANDLE hProcessInfo = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, TEXT("SharedMemory-ProcessInfo"));
 
-    double* sharedProcessInfo = (double*)MapViewOfFile(hProcessInfo, FILE_MAP_ALL_ACCESS, 0, 0, 3 * sizeof(double));
+    double *sharedProcessInfo = (double *)MapViewOfFile(hProcessInfo, FILE_MAP_ALL_ACCESS, 0, 0, 3 * sizeof(double));
 
     double totalLands = sharedProcessInfo[0];
     int DataSize = sharedProcessInfo[1];
     double runtime = sharedProcessInfo[2];
 
-    double* lands = (double*)MapViewOfFile(hData, FILE_MAP_ALL_ACCESS, 0, 0, DataSize * sizeof(double));
-    double* result = (double*)MapViewOfFile(hResult, FILE_MAP_ALL_ACCESS, 0, 0, Core * (DataSize + 4) * sizeof(double));
+    double *lands = (double *)MapViewOfFile(hData, FILE_MAP_ALL_ACCESS, 0, 0, DataSize * sizeof(double));
+    double *result = (double *)MapViewOfFile(hResult, FILE_MAP_ALL_ACCESS, 0, 0, Core * (DataSize + 4) * sizeof(double));
 
+    if (lands == NULL || result == NULL || sharedProcessInfo == NULL)
+    {
+        cout << "Could not open file mapping object (" << GetLastError() << ")" << endl;
+        CloseHandle(hData);
+        CloseHandle(hResult);
+        CloseHandle(hProcessInfo);
+        return 1;
+    }
 
+    int pid = GetCurrentProcessId();
+    int index = 0;
+
+    while (result[index] != pid)
+    {
+        index += (DataSize + 4);
+        if (index > (Core - 1) * (DataSize + 4))
+        {
+            index = 0;
+        }
+    }
 
     return 0;
 }
