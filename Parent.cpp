@@ -5,8 +5,8 @@
 #include <chrono>
 
 using namespace std;
-#define Filepath "C:\\Users\\Desktop\\dataset\\"
-#define Childpath "C:\\Users\\Desktop\\os_child\\Debug\\os_child.exe"
+#define Filepath "..\\dataset\\"
+#define Childpath "..\\os_child.exe"
 
 int main()
 {
