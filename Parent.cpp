@@ -20,5 +20,9 @@ int main() {
         return 1;
     }
 
+      SYSTEM_INFO sysinfo;
+      GetSystemInfo(&sysinfo);
+      int Core = sysinfo.dwNumberOfProcessors;
+
     return 0;
 }
