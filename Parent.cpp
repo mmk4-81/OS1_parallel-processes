@@ -91,5 +91,77 @@ int main()
     }
     cout << endl;
 
+    double idealboy1 = totalLands / 5 * 2;
+    double idealboy2 = totalLands / 5 * 2;
+    double idealgirl = totalLands / 5;
+    cout << "total lands =>" << totalLands << endl;
+    cout << "Ideal for boy 1 => " << idealboy1 << endl;
+    cout << "Ideal for boy 2 => " << idealboy2 << endl;
+    cout << "Ideal for girl => " << idealgirl << endl;
+    cout << endl;
+
+    for (int i = 0; i < Core; i++) {
+        WaitForSingleObject(p[i].hProcess, INFINITE);
+        CloseHandle(p[i].hProcess);
+        CloseHandle(p[i].hThread);
+    }
+
+    delete[] s;
+    delete[] p;
+
+    double* bestResult = nullptr;
+    double* distribution = new double[DataSize];
+    int sum[3] = {0,0,0};
+    double bestPid = result[0];
+    double* F = new double[Core];
+
+    for (int i = 0; i < DataSize; i++)
+    {
+        distribution[i] = result[i+ 1];
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        sum[i] = result[DataSize + i + 1];
+    }
+
+    double bestDiff = abs(sum[0] - 0.4 * totalLands) + abs(sum[1] - 0.4 * totalLands) + abs(sum[2] - 0.2 * totalLands);
+
+    cout << "Note: boy1 => 1  **** boy2 => 2  **** girl => 3\n\n";
+
+    for (int i = 0; i < Core; i++) {
+
+        double* currentResult = result + i * (DataSize + 4);
+        double currentPid = currentResult[0];
+
+        double currentDiff = abs(currentResult[DataSize + 1] - 0.4 * totalLands) + abs(currentResult[DataSize + 2] - 0.4 * totalLands) + abs(currentResult[DataSize + 3] - 0.2 * totalLands);
+
+        cout << "Process " << i + 1 << " (PID = " << currentPid << ") >>\n [ ";
+        for (int j = 0; j < DataSize; j++) {
+            cout << sharedNumbers[j] << "(" << currentResult[j+1 ] << ") , ";
+        }
+        cout << " ] \n ";
+        cout << "boy1 => " << currentResult[DataSize + 1] << " ****  boy2 => " << currentResult[DataSize + 2] << " ****  girl => " << currentResult[DataSize + 3];
+        cout << " **** F => " << currentDiff;
+        cout << endl;
+        cout << "-------------------------------------------------------------------------------------------------------------------\n";
+
+
+        if (currentDiff < bestDiff) {
+            bestDiff = currentDiff;
+            bestResult = currentResult;
+            bestPid = currentPid;
+        }
+    }
+    cout << "Best PID (" << bestPid << ") => f = " << bestDiff << endl;
+
+    UnmapViewOfFile(sharedNumbers);
+    UnmapViewOfFile(result);
+    UnmapViewOfFile(sharedProcessInfo);
+
+    CloseHandle(hData);
+    CloseHandle(hResult);
+    CloseHandle(hProcessInfo);
+
+
     return 0;
 }
