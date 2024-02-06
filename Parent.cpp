@@ -20,9 +20,14 @@ int main() {
         return 1;
     }
 
-      SYSTEM_INFO sysinfo;
-      GetSystemInfo(&sysinfo);
-      int Core = sysinfo.dwNumberOfProcessors;
+    SYSTEM_INFO sysinfo;
+    GetSystemInfo(&sysinfo);
+    int Core = sysinfo.dwNumberOfProcessors;
+    
+    double runtime = 0;
+    cout << "Enter runtime (seconds): ";
+    cin >> runtime;
+
 
     return 0;
 }
