@@ -6,6 +6,7 @@
 
 using namespace std;
 #define Filepath "C:\\Users\\Desktop\\dataset\\"
+#define Childpath "C:\\Users\\Desktop\\os_child\\Debug\\os_child.exe"
 
 int main()
 {
@@ -51,20 +52,44 @@ int main()
     file.clear();
     file.seekg(0, ios::beg);
 
-    for (int i = 0; i < DataSize; i++) {
+    for (int i = 0; i < DataSize; i++)
+    {
         file >> sharedNumbers[i];
     }
     file.close();
 
-     double totalLands = 0;
-    for (int i = 0; i < DataSize; i++) {
+    double totalLands = 0;
+    for (int i = 0; i < DataSize; i++)
+    {
         totalLands += sharedNumbers[i];
     }
-
 
     sharedProcessInfo[0] = totalLands;
     sharedProcessInfo[1] = DataSize;
     sharedProcessInfo[2] = runtime;
+
+    STARTUPINFO *s = new STARTUPINFO[Core];
+    PROCESS_INFORMATION *p = new PROCESS_INFORMATION[Core];
+
+    for (int k = 0; k < Core; k++)
+    {
+        ZeroMemory(&s[k], sizeof(s[k]));
+        s[k].cb = sizeof(s[k]);
+        ZeroMemory(&p[k], sizeof(p[k]));
+
+        bool b = CreateProcess(TEXT(Childpath), NULL, NULL, NULL, FALSE, 0, NULL, NULL, &s[k], &p[k]);
+        if (!b)
+        {
+            cout << "Create Process failed" << endl;
+            return 1;
+        }
+        else
+        {
+            result[k * (DataSize + 4)] = p[k].dwProcessId;
+            cout << "Process " << k + 1 << " PID: " << p[k].dwProcessId << endl;
+        }
+    }
+    cout << endl;
 
     return 0;
 }
