@@ -62,5 +62,9 @@ int main()
     }
 
 
+    sharedProcessInfo[0] = totalLands;
+    sharedProcessInfo[1] = DataSize;
+    sharedProcessInfo[2] = runtime;
+
     return 0;
 }
